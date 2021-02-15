@@ -19,6 +19,8 @@ type Page struct {
     Body  []byte
 }
 
+var cachedTemplates = template.Must(template.ParseFiles("templates/edit.html", "templates/view.html"))
+
 func (p *Page) save() error {
 	if _, err := os.Stat("data"); os.IsNotExist(err) {
 		os.Mkdir("data", 0700)
@@ -37,16 +39,13 @@ func loadPage(title string) (*Page, error) {
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
-	fileName := "templates/" + tmpl + ".html"
-    t, err := template.ParseFiles(fileName)
+	fileName := tmpl + ".html"
+	
+	err := cachedTemplates.ExecuteTemplate(w, fileName, p)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
         return
 	}
-    err = t.Execute(w, p)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-    }
 }
 
 func viewHandler(w http.ResponseWriter, r *http.Request) {
