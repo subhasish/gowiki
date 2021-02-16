@@ -7,7 +7,7 @@ go build -o bin wiki.go
 Run using:
 bin\wiki.exe
 
-Access a file using: http://localhost:8080/view/<page-name>
+Access a file using: http://localhost:8080/view/REPLACE-ME-PAGE-NAME
 Example: http://localhost:8080/view/test
 
 
